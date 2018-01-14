@@ -91,7 +91,7 @@ function makeBubbles(data) {
     .domain(byVariety.map(d => d.name))
 
   const color = wineType => d3.interpolateRainbow(quantize(wineType))
-  const radius = d3.scaleLinear()
+  const radius = d3.scaleLog()
     .range([MIN_RADIUS, MAX_RADIUS])
     .domain([d3.min(byVariety, d => d.value), d3.max(byVariety, d => d.value)])
 
@@ -120,6 +120,15 @@ function makeBubbles(data) {
   node.append('circle')
     .style('fill', d => color(d.name))
     .attr('r', d => radius(d.value))
+    .on('mouseover', function () {
+      d3.select(this.parentNode).classed('focus', true)
+    })
+    .on('mouseout', function () {
+      d3.select(this.parentNode).classed('focus', false)
+    })
+
+  node.append('text')
+    .text(d => d.name)
 
 }
 
